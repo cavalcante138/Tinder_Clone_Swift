@@ -9,7 +9,7 @@ import UIKit
 
 class CustomTextField: UITextField{
     
-    init(placeholder: String, isSecureField: Bool? = false){
+    init(placeholder: String, isSecureField: Bool? = false, capitalizationType: UITextAutocapitalizationType? = .none){
         super.init(frame: .zero)
         
         
@@ -25,6 +25,11 @@ class CustomTextField: UITextField{
         layer.cornerRadius = 5
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [.foregroundColor: UIColor(white: 1, alpha: 0.7)])
         isSecureTextEntry = isSecureField!
+        if let capitalization = capitalizationType {
+            autocapitalizationType = capitalization
+        }else{
+            autocapitalizationType = .none
+        }
         
         
     }

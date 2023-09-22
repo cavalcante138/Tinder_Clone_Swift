@@ -80,6 +80,7 @@ class HomeController: UIViewController {
             guard didLike == true else { return }
             
             Service.checkIfMatchExists(forUser: user) { didmatch in
+                self.noCardsLabel.isHidden = true
                 self.presentMatchView(forUser: user)
                 
                 guard let currentUser = self.user else { return }
@@ -100,6 +101,13 @@ class HomeController: UIViewController {
         }
         
         cardViews = deckView.subviews.map({ ($0 as? CardView)!  })
+
+        if(cardViews.isEmpty) {
+            view.addSubview(noCardsLabel)
+            noCardsLabel.fillSuperview()
+            return
+        }
+
         topCardView = cardViews.last
     }
     
@@ -136,6 +144,18 @@ class HomeController: UIViewController {
         }
     }
     
+    private lazy var noCardsLabel: UILabel = {
+        let label = UILabel()
+        let view = UIView()
+        label.numberOfLines = 2
+        label.text = "No more users. Try again later! 😄"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.textColor = .systemPurple
+        return label
+    }()
+    
+    
     func performSwipeAnimation(shouldLike: Bool){
         let translation: CGFloat = shouldLike ? 700 : -700
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut) {
@@ -147,7 +167,15 @@ class HomeController: UIViewController {
             
             self.cardViews.remove(at: self.cardViews.count - 1)
             
-            self.topCardView = self.cardViews.last
+            if(self.cardViews.isEmpty){
+                self.view.addSubview(self.noCardsLabel)
+                // center
+                self.noCardsLabel.fillSuperview()
+                print("DEBUG: No more cards...")
+            }else{
+                self.topCardView = self.cardViews.last
+            }
+            
         }
 
     }
@@ -157,6 +185,7 @@ class HomeController: UIViewController {
         let viewModel = MatchViewViewModel(currentUser: currentUser, matchedUser: user)
         let matchView = MatchView(viewModel: viewModel)
         matchView.delegate = self
+       // add above everything
         view.addSubview(matchView)
         matchView.fillSuperview()
     }

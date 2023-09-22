@@ -95,7 +95,15 @@ class LoginController: UIViewController{
         AuthService.logUserIn(withEmail: email, password: password) { result, error in
             if let error = error{
                 print("Debug: Error logging user in \(error.localizedDescription)")
+              
                 hud.dismiss(animated: true)
+                // show error
+
+                let alertController = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+       
                 return
             }
             

@@ -29,7 +29,7 @@ class RegistrationController: UIViewController{
     
     private let emailTextField = CustomTextField(placeholder: "Email")
     
-    private let fullNameTextField = CustomTextField(placeholder: "Full Name")
+    private let fullNameTextField = CustomTextField(placeholder: "Full Name", capitalizationType: .sentences)
     
     private let passwordTextField = CustomTextField(placeholder: "Password", isSecureField: true)
     
@@ -119,11 +119,18 @@ class RegistrationController: UIViewController{
             error in
             if let error = error{
                 print("Debug: Error signing user up \(error.localizedDescription)")
-                hud.dismiss()
-                return
+              
+                        hud.dismiss()
+                        let alertController = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    
             }
-            hud.dismiss()
-            self.delegate?.authenticationComplete()
+        hud.dismiss()
+        self.delegate?.authenticationComplete()
+          
         })
     }
     

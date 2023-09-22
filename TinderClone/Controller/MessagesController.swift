@@ -87,10 +87,12 @@ class MessagesController: UITableViewController{
     }
     
     func fetchConversations() {
-        showLoader(true)
-        
         Service.fetchConversations { conversations in
             
+            if(conversations.isEmpty){
+                return
+            }
+            self.showLoader(true)
             conversations.forEach { conversation in
                 let message = conversation.message
                 self.conversationdDictionary[message.chatPartnerId] = conversation
@@ -101,7 +103,7 @@ class MessagesController: UITableViewController{
             
             self.tableView.reloadData()
         }
-        
+          
     }
     func showChatController(forUser user: User){
         let controller = ChatController(user: user)

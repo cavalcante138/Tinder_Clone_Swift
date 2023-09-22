@@ -28,7 +28,7 @@ struct AuthService {
             
             Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { result, error in
                 if let error = error{
-                    print("DEGUG: Error singing user up \(error.localizedDescription)")
+                    completion(error)
                     return
                 }
                 
